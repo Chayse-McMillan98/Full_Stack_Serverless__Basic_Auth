@@ -1,31 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import { Auth } from 'aws-amplify';
-import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
+import React from 'react';
+import { Authenticator } from '@aws-amplify/ui-react';
+import { withAuthenticator } from '@aws-amplify/ui-react';
 import Container from './Container';
 
 function Profile() {
-    useEffect(() => {
-        checkUser();
-    }, []);
-
-    const [user, setUser] = useState({});
-    async function checkUser() {
-        try {
-            const data = await Auth.currentUserPoolUser();
-            const userInfo = { userName: data.username, ...data.attributes };
-            setUser(userInfo);
-        } catch(err) {
-            console.log('Error: '+err);
-        }
-    }
-
     return (
         <Container>
-            <h1>Profile</h1>
-            <h2>Username: {user.username}</h2>
-            <h2>Email: {user.email}</h2>
-            <h2>Phone: {user.phone_number}</h2>
-            <AmplifySignOut/>
+            <Authenticator
+                loginMechanisms={["email"]}
+                socialProviders={["google", "facebook", "amazon", "apple"]}
+            >
+                {({ signOut, user }) => (
+                    <main>
+                    <h1>Hello {user?.username}</h1>
+                    <button onClick={signOut}>Sign out</button>
+                    </main>
+                )}
+            </Authenticator>
+
         </Container>
     );
 }
+
+export default withAuthenticator(Profile);

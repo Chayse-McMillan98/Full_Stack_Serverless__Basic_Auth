@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { HashRouter, Switch, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 
 import Nav from './Nav';
 import Public from './Public';
@@ -16,7 +16,8 @@ const Router = () => {
     }, []);
 
     function setRoute() {
-        const location = window.location.href.split('/');
+        console.log('event Fired!');
+        const location = window.location.hash;
         const pathname = location[location.length-1];
         setCurrent(pathname ? pathname : 'home');
     }
@@ -24,12 +25,12 @@ const Router = () => {
     return (
         <HashRouter>
             <Nav current={current}/>
-            <Switch>
-                <Route exact path="/" component={Public}/>
-                <Route exact path="/protected" component={Protected}/>
-                <Route exact path="/profile" component={Profile}/>
-                <Route component={Public}/>
-            </Switch>
+            <Routes>
+                <Route exact path="/" element={ <Public/> }/>
+                <Route exact path="/protected" element={ <Protected/> }/>
+                <Route exact path="/profile" element={ <Profile/> }/>
+                <Route element={ <Public/> }/>
+            </Routes>
         </HashRouter>
     )
 };
