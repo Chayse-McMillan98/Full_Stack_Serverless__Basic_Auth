@@ -12,3 +12,5 @@ const styles = {
         padding: '50px 100px'
     }
 };
+
+export default Container;
